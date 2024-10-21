@@ -24,7 +24,3 @@ class Preferencias(BaseModel):
     categorias: List[str] | None = None
     tags: List[str] | None = None
 
-# Modelo base para um usuário
-class Usuario(BaseModel):
-    id: int
-    nome: str

@@ -1,14 +1,13 @@
 from typing import List
 from fastapi import APIRouter, HTTPException
-from app.models import Produto, CriarProduto, HistoricoCompras, Preferencias, Usuario
+from app.models.produtos_models import Produto, CriarProduto, HistoricoCompras, Preferencias
+from usuarios_routers import usuarios
 
 router = APIRouter()
 
 # Armazenamento em memória
 produtos         =[]
 contador_produto =1
-usuarios = []
-contador_usuario = 1
 
 # Histórico de compras em memória
 historico_compras = {}
@@ -90,15 +89,3 @@ def recomendar_produtos(usuario_id: int, preferencias: Preferencias):
         # produtos_recomendados = [p for p in produtos_recomendados if any(tag in preferencias.tags for tag in p.tags)]
 
     return produtos_recomendados
-
-@router.post("/usuarios/", response_model=Usuario)
-def criar_usuario(nome: str):
-    global contador_usuario
-    novo_usuario = Usuario(id=contador_usuario, nome=nome)
-    usuarios.append(novo_usuario)
-    contador_usuario += 1
-    return novo_usuario
-
-@router.get("/usuarios/", response_model=List[Usuario])
-def listar_usuarios():
-    return usuarios
