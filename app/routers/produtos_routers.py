@@ -6,7 +6,7 @@ from app.models.produtos_models import (
     HistoricoCompras,
     Preferencias,
 )
-from usuarios_routers import usuarios
+from .usuarios_routers import usuarios
 
 router = APIRouter()
 
