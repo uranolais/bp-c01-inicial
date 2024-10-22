@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Dict
 from fastapi import APIRouter, HTTPException
 from app.models.produtos_models import Produto, CriarProduto, HistoricoCompras, Preferencias
 from usuarios_routers import usuarios
@@ -6,16 +6,16 @@ from usuarios_routers import usuarios
 router = APIRouter()
 
 # Armazenamento em memória
-produtos         =[]
-contador_produto =1
+produtos: List[Produto]        =[]
+contador_produto: int =1
 
 # Histórico de compras em memória
-historico_compras = {}
+historico_compras: Dict[int, List[int]] = {}
 
 
 # Rota para cadastrar produtos
 @router.post("/produtos/", response_model=Produto)
-def criar_produto(produto: CriarProduto):
+def criar_produto(produto: CriarProduto) -> Produto:
     global contador_produto
     novo_produto = Produto(id=contador_produto, **produto.model_dump())
     produtos.append(novo_produto)
@@ -24,7 +24,7 @@ def criar_produto(produto: CriarProduto):
 
 # Rota para listar todos os produtos
 @router.get("/produtos/", response_model=List[Produto])
-def listar_produtos():
+def listar_produtos() -> List[Produto]:
     return produtos
 
 # # Rota para simular o histórico de compras de um usuário
@@ -35,7 +35,7 @@ def listar_produtos():
 
 # Rota para simular a criação do histórico de compras de um usuário
 @router.post("/historico_compras/{usuario_id}")
-def adicionar_historico_compras(usuario_id: int, compras: HistoricoCompras):
+def adicionar_historico_compras(usuario_id: int, compras: HistoricoCompras) -> dict:
     if usuario_id not in [usuario.id for usuario in usuarios]:
         raise HTTPException(status_code=404, detail="Usuário não encontrado")
     historico_compras[usuario_id] = compras.produtos_ids
@@ -43,7 +43,7 @@ def adicionar_historico_compras(usuario_id: int, compras: HistoricoCompras):
 
 # Rota para recomendações de produtos
 @router.post("/recomendacoes/{usuario_id}", response_model=List[Produto])
-def recomendar_produtos(usuario_id: int, preferencias: Preferencias):
+def recomendar_produtos(usuario_id: int, preferencias: Preferencias) -> List[Produto]:
     if usuario_id not in historico_compras:
         print("Histórico de compras não encontrado")
         raise HTTPException(status_code=404, detail="Histórico de compras não encontrado")
