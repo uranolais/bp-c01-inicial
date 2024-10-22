@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.routers import produtos_routers,usuarios_routers
+from app.routers import produtos_routers, usuarios_routers
 from typing import Dict
 
 app = FastAPI()
@@ -7,11 +7,12 @@ app = FastAPI()
 app.include_router(produtos_routers.router)
 app.include_router(usuarios_routers.router)
 
-MENSAGEM_HOME: str    ="Bem-vindo à API de Recomendação de Produtos"
+MENSAGEM_HOME: str = "Bem-vindo à API de Recomendação de Produtos"
+
 
 # Iniciando o servidor
-@app.get("/", response_model = Dict[str,str])
-def home() -> Dict[str,str]:
+@app.get("/", response_model=Dict[str, str])
+def home() -> Dict[str, str]:
     """
     Rota principal da API.
 
